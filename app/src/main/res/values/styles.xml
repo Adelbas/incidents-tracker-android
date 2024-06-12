@@ -1,0 +1,14 @@
+<resources>
+    <style name="CustomBottomNavigationStyle" parent="Widget.Design.BottomNavigationView">
+        <item name="itemTextAppearanceActive">@style/BottomNavigationActiveTextAppearance</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationInactiveTextAppearance</item>
+    </style>
+
+    <style name="BottomNavigationActiveTextAppearance" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="BottomNavigationInactiveTextAppearance" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textSize">12sp</item>
+    </style>
+</resources>

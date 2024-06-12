@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Incidents Tracker</string>
+    <string name="location_permission_denied">"Для использования приложения необходимо предоставить доступ к местоположению"</string>
+</resources>
