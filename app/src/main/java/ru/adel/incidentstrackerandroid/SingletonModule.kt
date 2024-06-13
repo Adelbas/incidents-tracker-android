@@ -18,6 +18,7 @@ import ru.adel.incidentstrackerandroid.service.main.MainApiService
 import ru.adel.incidentstrackerandroid.utils.AuthAuthenticator
 import ru.adel.incidentstrackerandroid.utils.AuthInterceptor
 import ru.adel.incidentstrackerandroid.utils.TokenManager
+import ru.adel.incidentstrackerandroid.utils.WebSocketService
 import javax.inject.Singleton
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "data_store")
@@ -29,6 +30,10 @@ class SingletonModule {
     @Singleton
     @Provides
     fun provideTokenManager(@ApplicationContext context: Context): TokenManager = TokenManager(context)
+
+    @Singleton
+    @Provides
+    fun provideWebSocketService(tokenManager: TokenManager): WebSocketService = WebSocketService(tokenManager)
 
     @Singleton
     @Provides

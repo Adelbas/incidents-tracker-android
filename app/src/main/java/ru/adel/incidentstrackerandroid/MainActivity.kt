@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -38,12 +39,21 @@ class MainActivity : AppCompatActivity(), OnAddButtonClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        MapKitFactory.setApiKey(BuildConfig.MAPKIT_API_KEY)
+//        val haveApiKey = savedInstanceState?.getBoolean("haveApiKey") ?: false
+//        if (!haveApiKey) {
+//            MapKitFactory.setApiKey(BuildConfig.MAPKIT_API_KEY)
+//        }
 
         requestLocationPermission()
-        startLocationService()
         processNavigationMenu()
     }
+
+
+
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        outState.putBoolean("haveApiKey", true)
+//    }
 
     private fun requestLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
@@ -92,17 +102,16 @@ class MainActivity : AppCompatActivity(), OnAddButtonClickListener {
                 grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, R.string.location_permission_denied, Toast.LENGTH_SHORT).show()
                 finish()
-            }
+            } //else startLocationService()
         }
     }
 
-    private fun startLocationService() {
-        val serviceIntent = Intent(this, LocationService::class.java).apply {
-            action = LocationService.ACTION_START
-            startForegroundService(this)
-        }
-//        startForegroundService(serviceIntent)
-    }
+//    private fun startLocationService() {
+//        Intent(this, LocationService::class.java).apply {
+//            action = LocationService.ACTION_START
+//            startForegroundService(this)
+//        }
+//    }
 
     private fun processNavigationMenu() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment?

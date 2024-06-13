@@ -1,5 +1,6 @@
 package ru.adel.incidentstrackerandroid.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -21,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.adel.incidentstrackerandroid.R
 import ru.adel.incidentstrackerandroid.models.AuthenticationRequest
 import ru.adel.incidentstrackerandroid.utils.ApiResponse
+import ru.adel.incidentstrackerandroid.utils.LocationService
 import ru.adel.incidentstrackerandroid.viewmodels.AuthViewModel
 import ru.adel.incidentstrackerandroid.viewmodels.CoroutinesErrorHandler
 import ru.adel.incidentstrackerandroid.viewmodels.TokenViewModel
@@ -55,13 +57,22 @@ class LoginFragment : Fragment() {
         val btnRegister = view.findViewById<Button>(R.id.btnRegister)
 
         tokenViewModel.accessToken.observe(viewLifecycleOwner) { token ->
-            if (token != null)
+            if (token != null) {
+                Intent(requireContext(), LocationService::class.java).apply {
+                    action = LocationService.ACTION_START
+                    requireActivity().startForegroundService(this)
+                }
                 navController.navigate(R.id.action_loginFragment_to_main_nav_graph)
+            }
             else foreground.visibility = View.VISIBLE
         }
 
         btnRegister.setOnClickListener {
 //            navController.navigate(R.id.action_loginFragment_to_registerFragment)
+            Intent(requireContext(), LocationService::class.java).apply {
+                action = LocationService.ACTION_START
+                requireActivity().startForegroundService(this)
+            }
             navController.navigate(R.id.action_loginFragment_to_main_nav_graph)
         }
 

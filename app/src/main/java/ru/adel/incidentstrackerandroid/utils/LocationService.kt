@@ -4,27 +4,31 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ServiceInfo
-import android.os.Build
+import android.location.Location
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import okhttp3.internal.notify
 import ru.adel.incidentstrackerandroid.R
 import ru.adel.incidentstrackerandroid.utils.location.DefaultLocationClient
 import ru.adel.incidentstrackerandroid.utils.location.LocationClient
+import javax.inject.Inject
 
-class LocationService : Service() {
+@AndroidEntryPoint
+class LocationService: Service() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient
+
+    @Inject
+    lateinit var webSocketService: WebSocketService
 
     override fun onBind(p0: Intent?): IBinder? {
         return null
@@ -43,29 +47,25 @@ class LocationService : Service() {
             ACTION_START -> start()
             ACTION_STOP -> stop()
         }
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
     private fun start() {
+        webSocketService.start()
         val notification = NotificationCompat.Builder(this, "location")
-            .setContentTitle("Tracking location...")
-            .setContentText("Location: null")
+            .setContentTitle("Поиск происшествий...")
             .setSmallIcon(R.drawable.ic_launcher_background)
-            .setOngoing(true)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         locationClient
             .getLocationUpdates(10000L)
-            .catch { e -> e.printStackTrace() }
+            .catch { e ->
+                Log.e("LOCATION-ERROR", e.message.toString())
+                e.printStackTrace()
+            }
             .onEach { location ->
-                val lat = location.latitude.toString()
-                val long = location.longitude.toString()
-                val updatedNotification = notification.setContentText(
-                    "Location: ($lat, $long)"
-                )
-                Log.i("LOCATION","($lat, $long)" )
-                notificationManager.notify(1, updatedNotification.build())
+                handleLocationUpdate(location)
             }
             .launchIn(serviceScope)
 
@@ -80,6 +80,12 @@ class LocationService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         serviceScope.cancel()
+    }
+
+    private fun handleLocationUpdate(location: Location) {
+        val lat = location.latitude.toString()
+        val long = location.longitude.toString()
+        Log.i("LOCATION","($lat, $long)" )
     }
 
     companion object {
