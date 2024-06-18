@@ -1,5 +1,6 @@
 package ru.adel.incidentstrackerandroid.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,14 +13,16 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import ru.adel.incidentstrackerandroid.R
 import ru.adel.incidentstrackerandroid.models.RegistrationRequest
 import ru.adel.incidentstrackerandroid.utils.ApiResponse
+import ru.adel.incidentstrackerandroid.utils.WebSocketService
+import ru.adel.incidentstrackerandroid.utils.coroutinesErrorHandler
+import ru.adel.incidentstrackerandroid.utils.hideKeyboard
+import ru.adel.incidentstrackerandroid.utils.location.LocationService
 import ru.adel.incidentstrackerandroid.viewmodels.AuthViewModel
-import ru.adel.incidentstrackerandroid.viewmodels.CoroutinesErrorHandler
 import ru.adel.incidentstrackerandroid.viewmodels.TokenViewModel
 
 class RegisterFragment : Fragment() {
@@ -51,6 +54,7 @@ class RegisterFragment : Fragment() {
         val btnRegister = view.findViewById<Button>(R.id.btnRegister)
 
         btnRegister.setOnClickListener {
+            hideKeyboard(requireActivity(), requireView())
             val firstName = etFirstName.text.toString()
             val lastName = etLastName.text.toString()
             val email = etEmail.text.toString()
@@ -61,12 +65,7 @@ class RegisterFragment : Fragment() {
                     RegistrationRequest(
                         firstName, lastName, email, password
                     ),
-                    object: CoroutinesErrorHandler {
-                        override fun onError(message: String) {
-                            Log.e("Error", "Error! $message")
-                            Toast.makeText(requireContext(), "Ошибка", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                    coroutinesErrorHandler
                 )
             } else {
                 Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
@@ -90,8 +89,20 @@ class RegisterFragment : Fragment() {
                     Toast.makeText(requireContext(), "Успешная регистрация", Toast.LENGTH_SHORT).show()
                     tokenViewModel.saveToken(it.data.accessToken, it.data.refreshToken)
                     navController.navigate(R.id.action_registerFragment_to_main_nav_graph)
+                    startForegroundServices()
                 }
             }
+        }
+    }
+
+    private fun startForegroundServices() {
+        Intent(requireContext(), WebSocketService::class.java).apply {
+            action = WebSocketService.ACTION_START
+            requireActivity().startForegroundService(this)
+        }
+        Intent(requireContext(), LocationService::class.java).apply {
+            action = LocationService.ACTION_START
+            requireActivity().startForegroundService(this)
         }
     }
 }

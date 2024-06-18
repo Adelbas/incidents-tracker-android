@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import ru.adel.incidentstrackerandroid.utils.TokenManager
 import javax.inject.Inject
@@ -41,7 +42,7 @@ class TokenViewModel @Inject constructor(
     }
 
     fun deleteToken() {
-        viewModelScope.launch(Dispatchers.IO) {
+        runBlocking {
             tokenManager.deleteAccessToken()
             tokenManager.deleteRefreshToken()
         }

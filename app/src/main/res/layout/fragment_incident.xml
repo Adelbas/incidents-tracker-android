@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                tools:context=".ui.main.IncidentFragment">
+
+    <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="45dp"
+            android:layout_height="47dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"/>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="70dp"
+            android:elevation="4dp"
+            android:padding="16dp" android:layout_centerHorizontal="true" android:layout_alignParentTop="true"
+            android:visibility="visible">
+
+        <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+        <LinearLayout
+                android:id="@+id/incidentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" android:visibility="visible">
+
+            <TextView
+                    android:id="@+id/incidentTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Название происшествия"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="8dp"/>
+
+            <ImageView
+                    android:id="@+id/incidentImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:scaleType="fitCenter"
+                    android:paddingBottom="8dp"/>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="0dp"
+                    android:gravity="bottom">
+
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:id="@+id/incidentCreatedBy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Создано: "
+                            android:textSize="18sp"
+                            android:paddingEnd="8dp"/>
+                    <TextView
+                            android:id="@+id/incidentDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Время события: "
+                            android:textSize="18sp"
+                            android:paddingEnd="8dp"/>
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3">
+                        <View
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" android:id="@+id/view" android:layout_weight="1"
+                                tools:visibility="invisible"/>
+                        <ImageView
+                                android:id="@+id/viewsIcon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_eye"
+                                android:paddingEnd="4dp"/>
+                        <TextView
+                                android:id="@+id/viewsCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="16sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

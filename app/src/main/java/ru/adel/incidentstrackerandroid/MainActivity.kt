@@ -1,31 +1,20 @@
 package ru.adel.incidentstrackerandroid
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI.setupWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.yandex.mapkit.MapKitFactory
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import ru.adel.incidentstrackerandroid.ui.main.MainFragment
 import ru.adel.incidentstrackerandroid.ui.main.OnAddButtonClickListener
-import ru.adel.incidentstrackerandroid.utils.LocationService
 
 
 @AndroidEntryPoint
@@ -39,21 +28,10 @@ class MainActivity : AppCompatActivity(), OnAddButtonClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        val haveApiKey = savedInstanceState?.getBoolean("haveApiKey") ?: false
-//        if (!haveApiKey) {
-//            MapKitFactory.setApiKey(BuildConfig.MAPKIT_API_KEY)
-//        }
 
         requestLocationPermission()
         processNavigationMenu()
     }
-
-
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        outState.putBoolean("haveApiKey", true)
-//    }
 
     private fun requestLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
@@ -102,16 +80,9 @@ class MainActivity : AppCompatActivity(), OnAddButtonClickListener {
                 grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, R.string.location_permission_denied, Toast.LENGTH_SHORT).show()
                 finish()
-            } //else startLocationService()
+            }
         }
     }
-
-//    private fun startLocationService() {
-//        Intent(this, LocationService::class.java).apply {
-//            action = LocationService.ACTION_START
-//            startForegroundService(this)
-//        }
-//    }
 
     private fun processNavigationMenu() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
@@ -155,7 +126,7 @@ class MainActivity : AppCompatActivity(), OnAddButtonClickListener {
 
     override fun onAddButtonResult(result: Boolean, bundle: Bundle) {
         if (result) {
-            navController.navigate(R.id.addFragment, bundle)
+            navController.navigate(R.id.action_main_to_addFragment, bundle)
         }
     }
 }

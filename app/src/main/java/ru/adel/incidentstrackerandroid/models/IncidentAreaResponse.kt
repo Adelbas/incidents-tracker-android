@@ -1,8 +1,9 @@
 package ru.adel.incidentstrackerandroid.models
 
-data class IncidentPostRequest(
+data class IncidentAreaResponse (
+    val id: Long,
     val title: String,
     val longitude: Double,
     val latitude: Double,
-    val image: ByteArray
+    val createdAt: String
 )

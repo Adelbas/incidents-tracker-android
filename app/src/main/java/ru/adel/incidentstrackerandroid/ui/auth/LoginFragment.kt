@@ -13,7 +13,6 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -22,9 +21,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.adel.incidentstrackerandroid.R
 import ru.adel.incidentstrackerandroid.models.AuthenticationRequest
 import ru.adel.incidentstrackerandroid.utils.ApiResponse
-import ru.adel.incidentstrackerandroid.utils.LocationService
+import ru.adel.incidentstrackerandroid.utils.WebSocketService
+import ru.adel.incidentstrackerandroid.utils.coroutinesErrorHandler
+import ru.adel.incidentstrackerandroid.utils.hideKeyboard
+import ru.adel.incidentstrackerandroid.utils.location.LocationService
 import ru.adel.incidentstrackerandroid.viewmodels.AuthViewModel
-import ru.adel.incidentstrackerandroid.viewmodels.CoroutinesErrorHandler
 import ru.adel.incidentstrackerandroid.viewmodels.TokenViewModel
 
 @AndroidEntryPoint
@@ -58,22 +59,15 @@ class LoginFragment : Fragment() {
 
         tokenViewModel.accessToken.observe(viewLifecycleOwner) { token ->
             if (token != null) {
-                Intent(requireContext(), LocationService::class.java).apply {
-                    action = LocationService.ACTION_START
-                    requireActivity().startForegroundService(this)
-                }
+                startForegroundServices()
                 navController.navigate(R.id.action_loginFragment_to_main_nav_graph)
             }
             else foreground.visibility = View.VISIBLE
         }
 
         btnRegister.setOnClickListener {
-//            navController.navigate(R.id.action_loginFragment_to_registerFragment)
-            Intent(requireContext(), LocationService::class.java).apply {
-                action = LocationService.ACTION_START
-                requireActivity().startForegroundService(this)
-            }
-            navController.navigate(R.id.action_loginFragment_to_main_nav_graph)
+            hideKeyboard(requireActivity(), requireView())
+            navController.navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
         viewModel.loginResponse.observe(viewLifecycleOwner) {
@@ -100,18 +94,25 @@ class LoginFragment : Fragment() {
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
             if (email.isNotEmpty() && password.isNotEmpty()) {
+                hideKeyboard(requireActivity(), requireView())
                 viewModel.login(
                     AuthenticationRequest(email, password),
-                    object: CoroutinesErrorHandler {
-                        override fun onError(message: String) {
-                            Log.e("Error", "Error! $message")
-                            Toast.makeText(requireContext(), "Ошибка", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                    coroutinesErrorHandler
                 )
             } else {
                 Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun startForegroundServices() {
+        Intent(requireContext(), WebSocketService::class.java).apply {
+            action = WebSocketService.ACTION_START
+            requireActivity().startForegroundService(this)
+        }
+        Intent(requireContext(), LocationService::class.java).apply {
+            action = LocationService.ACTION_START
+            requireActivity().startForegroundService(this)
         }
     }
 }

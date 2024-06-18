@@ -1,6 +1,7 @@
 package ru.adel.incidentstrackerandroid
 
 import android.app.Application
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -27,8 +28,10 @@ class HiltApplication: Application() {
         val channelIncidentNotification = NotificationChannel(
             "incident",
             "Incident",
-            NotificationManager.IMPORTANCE_DEFAULT
-        )
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+        }
         notificationManager.createNotificationChannels(listOf(channelLocationShare,channelIncidentNotification))
     }
 }

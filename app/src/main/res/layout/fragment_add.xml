@@ -3,16 +3,14 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:gravity="center"
              android:padding="16dp"
              tools:context="ui.main.AddFragment">
     <LinearLayout
             android:id="@+id/addLayout"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:gravity="center"
-            android:padding="16dp"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:visibility="visible">
         <EditText
                 android:layout_width="match_parent"
@@ -21,10 +19,23 @@
                 android:hint="Название"
                 android:ems="10"
                 android:id="@+id/titleText"/>
+        <ImageView
+                android:id="@+id/selectedImageView"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="fitCenter"/>
+        <Button
+                android:id="@+id/selectImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Выбрать изображение"/>
         <Button
                 android:id="@+id/submitBtn"
                 android:text="Отправить"
                 android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
                 android:layout_height="wrap_content"/>
     </LinearLayout>
     <ProgressBar

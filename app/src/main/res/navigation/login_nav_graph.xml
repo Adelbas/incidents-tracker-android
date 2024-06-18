@@ -16,7 +16,9 @@
         <action
                 android:id="@+id/action_loginFragment_to_main_nav_graph"
                 app:destination="@id/main_nav_graph"
-                app:popUpToInclusive="true" />
+                app:popUpToInclusive="true"
+                app:launchSingleTop="true"
+                app:restoreState="true"/>
     </fragment>
     <fragment
             android:id="@+id/registerFragment"

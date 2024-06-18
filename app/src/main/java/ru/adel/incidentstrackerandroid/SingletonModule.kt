@@ -18,7 +18,7 @@ import ru.adel.incidentstrackerandroid.service.main.MainApiService
 import ru.adel.incidentstrackerandroid.utils.AuthAuthenticator
 import ru.adel.incidentstrackerandroid.utils.AuthInterceptor
 import ru.adel.incidentstrackerandroid.utils.TokenManager
-import ru.adel.incidentstrackerandroid.utils.WebSocketService
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "data_store")
@@ -33,18 +33,17 @@ class SingletonModule {
 
     @Singleton
     @Provides
-    fun provideWebSocketService(tokenManager: TokenManager): WebSocketService = WebSocketService(tokenManager)
-
-    @Singleton
-    @Provides
     fun provideOkHttpClient(
         authInterceptor: AuthInterceptor,
         authAuthenticator: AuthAuthenticator,
     ): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
 
         return OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
             .authenticator(authAuthenticator)

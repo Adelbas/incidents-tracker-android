@@ -1,10 +1,57 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   xmlns:tools="http://schemas.android.com/tools"
-                                                   android:id="@+id/settings"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="match_parent"
-                                                   tools:context=".ui.main.SettingsFragment">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="24dp"
+              tools:context=".ui.main.SettingsFragment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp">
+        <NumberPicker
+                android:id="@+id/radiusNumberPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Радиус области поиска"
+                android:textColor="@color/black"
+                android:textSize="18sp"/>
+    </LinearLayout>
+
+    <CheckBox
+            android:id="@+id/checkboxIsRadiusVisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Показывать область поиска"
+            android:textSize="18sp"
+            android:layout_marginBottom="16dp"/>
+    <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сохранить"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"/>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="end">
+
+        <Button
+                android:id="@+id/buttonExit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Выйти"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+
+</LinearLayout>
