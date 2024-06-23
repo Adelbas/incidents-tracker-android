@@ -73,7 +73,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     //Yandex MapKit
-    implementation 'com.yandex.android:maps.mobile:4.6.1-lite'
+    implementation 'com.yandex.android:maps.mobile:4.6.1-full'
 
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
     implementation 'com.github.NaikSoftware:StompProtocolAndroid:1.6.6'

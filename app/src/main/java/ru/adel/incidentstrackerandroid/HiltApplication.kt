@@ -14,6 +14,7 @@ class HiltApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         MapKitFactory.setApiKey(BuildConfig.MAPKIT_API_KEY)
+        MapKitFactory.setLocale("ru_RU")
 
         initNotifications()
     }
