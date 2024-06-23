@@ -293,6 +293,8 @@ class MainFragment: Fragment() {
             val bundle = Bundle()
             bundle.putLong("incidentId", incident.id)
             bundle.putString("timestamp", incident.createdAt)
+            bundle.putDouble("latitude", incident.latitude)
+            bundle.putDouble("longitude", incident.longitude)
             findNavController().navigate(
                 R.id.action_main_to_incidentFragment,
                 bundle,

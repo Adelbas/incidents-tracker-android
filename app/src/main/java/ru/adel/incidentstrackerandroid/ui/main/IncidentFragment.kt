@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
+import com.yandex.mapkit.geometry.Point
+import com.yandex.mapkit.search.*
+import com.yandex.mapkit.search.Session.SearchListener
 import dagger.hilt.android.AndroidEntryPoint
 import ru.adel.incidentstrackerandroid.R
 import ru.adel.incidentstrackerandroid.models.IncidentGetResponse
@@ -36,6 +39,7 @@ class IncidentFragment : Fragment() {
     private lateinit var incidentDateTv: TextView
     private lateinit var viewsCountTv: TextView
     private lateinit var imageView: ImageView
+    private lateinit var addressTv: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,9 +60,19 @@ class IncidentFragment : Fragment() {
         incidentDateTv = view.findViewById(R.id.incidentDate)
         viewsCountTv = view.findViewById(R.id.viewsCount)
         imageView = view.findViewById(R.id.incidentImage)
+        addressTv = view.findViewById(R.id.incidentAddress)
 
         val incidentId = arguments?.getLong("incidentId")
         val timestamp = arguments?.getString("timestamp")
+        val latitude = arguments?.getDouble("latitude")
+        val longitude = arguments?.getDouble("longitude")
+
+        val searchManager = SearchFactory.getInstance().createSearchManager(SearchManagerType.COMBINED)
+        val searchOptions = SearchOptions().apply {
+            searchTypes = SearchType.GEO.value
+        }
+
+        val searchSession = searchManager.submit(Point(latitude!!, longitude!!), 16, searchOptions, searchSessionListener)
 
         val incidentDate = LocalDateTime.parse(timestamp).toLocalDate()
 
@@ -123,5 +137,20 @@ class IncidentFragment : Fragment() {
         intent.putExtra("incidentDate", LocalDateTime.parse(incident.createdAt).toLocalDate().toString())
         intent.putExtra("status", InteractionStatus.VIEWED.name)
         LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+    }
+
+    private val searchSessionListener = object : SearchListener {
+        override fun onSearchResponse(response: Response) {
+            if (response.collection.children.isNotEmpty()) {
+                val address = response.collection.children.first().obj?.metadataContainer?.getItem(
+                    ToponymObjectMetadata::class.java
+                )?.address?.formattedAddress
+                addressTv.text = "Адрес: ${address}"
+            }
+        }
+
+        override fun onSearchError(p0: com.yandex.runtime.Error) {
+            Log.i("SEARCH","Search error")
+        }
     }
 }

@@ -78,6 +78,14 @@
                             android:text="Время события: "
                             android:textSize="18sp"
                             android:paddingEnd="8dp"/>
+                    <TextView
+                            android:id="@+id/incidentAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Адрес: "
+                            android:textSize="18sp"
+                            android:paddingEnd="8dp"/>
                     <LinearLayout
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
