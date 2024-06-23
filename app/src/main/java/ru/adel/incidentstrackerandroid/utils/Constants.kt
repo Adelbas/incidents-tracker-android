@@ -18,6 +18,8 @@ import ru.adel.incidentstrackerandroid.models.ErrorResponse
 import ru.adel.incidentstrackerandroid.viewmodels.CoroutinesErrorHandler
 import kotlin.math.PI
 import kotlin.math.cos
+import kotlin.math.max
+import kotlin.math.min
 
 fun<T> apiRequestFlow(call: suspend () -> Response<T>): Flow<ApiResponse<T>> = flow {
     emit(ApiResponse.Loading)
@@ -62,9 +64,9 @@ fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): D
 fun offsetPointBottom(point: Point, distanceMeters: Double): Point {
     val distanceKm = distanceMeters / 1000.0
 
-    val newLatitude = point.latitude - (distanceKm / 111.0)
+    val newLatitude = max(-90.0, (point.latitude - (distanceKm / 111.0)))
 
-    val newLongitude = point.longitude - (distanceKm / (111.0 * cos(point.latitude * PI / 180.0)))
+    val newLongitude = max(-180.0, (point.longitude - (distanceKm / (111.0 * cos(point.latitude * PI / 180.0)))))
 
     return Point(newLatitude, newLongitude)
 }
@@ -72,9 +74,9 @@ fun offsetPointBottom(point: Point, distanceMeters: Double): Point {
 fun offsetPointTop(point: Point, distanceMeters: Double): Point {
     val distanceKm = distanceMeters / 1000.0
 
-    val newLatitude = point.latitude + (distanceKm / 111.0)
+    val newLatitude = min(90.0,(point.latitude + (distanceKm / 111.0)))
 
-    val newLongitude = point.longitude + (distanceKm / (111.0 * cos(point.latitude * PI / 180.0)))
+    val newLongitude = min(180.0,(point.longitude + (distanceKm / (111.0 * cos(point.latitude * PI / 180.0)))))
 
     return Point(newLatitude, newLongitude)
 }
