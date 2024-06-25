@@ -41,6 +41,11 @@ class IncidentFragment : Fragment() {
     private lateinit var imageView: ImageView
     private lateinit var addressTv: TextView
 
+    private var searchManager = SearchFactory.getInstance().createSearchManager(SearchManagerType.COMBINED)
+    private var searchOptions = SearchOptions().apply {
+        searchTypes = SearchType.GEO.value
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,15 +69,6 @@ class IncidentFragment : Fragment() {
 
         val incidentId = arguments?.getLong("incidentId")
         val timestamp = arguments?.getString("timestamp")
-        val latitude = arguments?.getDouble("latitude")
-        val longitude = arguments?.getDouble("longitude")
-
-        val searchManager = SearchFactory.getInstance().createSearchManager(SearchManagerType.COMBINED)
-        val searchOptions = SearchOptions().apply {
-            searchTypes = SearchType.GEO.value
-        }
-
-        val searchSession = searchManager.submit(Point(latitude!!, longitude!!), 16, searchOptions, searchSessionListener)
 
         val incidentDate = LocalDateTime.parse(timestamp).toLocalDate()
 
@@ -118,6 +114,10 @@ class IncidentFragment : Fragment() {
         incidentDateTv.text = "Дата: ${dateTime}"
         viewsCountTv.text = response.views.toString()
         imageView.setImageBitmap(imageBitmap)
+
+        val latitude = response.latitude
+        val longitude = response.longitude
+        val searchSession = searchManager.submit(Point(latitude, longitude), 16, searchOptions, searchSessionListener)
     }
 
     private fun base64ToBitmap(base64String: String): Bitmap? {
