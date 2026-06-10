@@ -25,7 +25,7 @@ android {
 
         Properties properties = new Properties()
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
-        def mapKitApiKey = properties.getProperty('MAPKIT_API_KEY', "")
+        def mapKitApiKey = properties.getProperty('MAPKIT_API_KEY', "56ad6a7a-e9bb-4203-9ac3-cb5bf7731605")
         buildConfigField "String", "MAPKIT_API_KEY", "\"${mapKitApiKey}\""
     }
 
@@ -36,11 +36,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "17"
     }
 }
 
@@ -51,8 +52,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
 
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
@@ -60,20 +61,20 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
-    def hilt_version = "2.44"
+    def hilt_version = "2.56.2"
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
-    def okhttp_version = "4.10.0"
+    def okhttp_version = "4.12.0"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
-    def nav_version = "2.5.3"
+    def nav_version = "2.8.9"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     //Yandex MapKit
-    implementation 'com.yandex.android:maps.mobile:4.6.1-full'
+    implementation 'com.yandex.android:maps.mobile:4.19.0-full'
 
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
     implementation 'com.github.NaikSoftware:StompProtocolAndroid:1.6.6'

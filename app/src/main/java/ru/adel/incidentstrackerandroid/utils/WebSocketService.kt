@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ServiceInfo
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -90,7 +91,7 @@ class WebSocketService: Service() {
         val notification = NotificationCompat.Builder(this, "location")
             .setContentTitle("Поиск происшествий...")
             .setSmallIcon(R.drawable.ic_launcher_background)
-        startForeground(1, notification.build())
+        startForeground(1, notification.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
 
         val accessToken = runBlocking {
             tokenManager.getAccessToken().first().toString()
