@@ -7,6 +7,9 @@ import java.time.LocalDateTime
 data class NotificationMessage(
     val incidentId: Long,
     val title: String,
+    val categoryCode: String?,
+    val categoryName: String?,
+    val dangerLevel: String?,
     val longitude: Double,
     val latitude: Double,
     val timestamp: LocalDateTime
@@ -14,6 +17,9 @@ data class NotificationMessage(
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
         parcel.readString() ?: "",
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
         parcel.readDouble(),
         parcel.readDouble(),
         LocalDateTime.parse(parcel.readString())
@@ -22,6 +28,9 @@ data class NotificationMessage(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(incidentId)
         parcel.writeString(title)
+        parcel.writeString(categoryCode)
+        parcel.writeString(categoryName)
+        parcel.writeString(dangerLevel)
         parcel.writeDouble(longitude)
         parcel.writeDouble(latitude)
         parcel.writeString(timestamp.toString())

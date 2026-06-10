@@ -19,6 +19,17 @@
                 android:hint="Название"
                 android:ems="10"
                 android:id="@+id/titleText"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                android:maxLines="5"
+                android:gravity="top|start"
+                android:hint="Описание (необязательно)"
+                android:ems="10"
+                android:id="@+id/descriptionText"/>
         <ImageView
                 android:id="@+id/selectedImageView"
                 android:layout_width="match_parent"

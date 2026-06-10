@@ -144,11 +144,14 @@ class MainFragment: Fragment() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.getParcelableExtra<NotificationMessage>("notificationMessage")?.let { message ->
                 val incident = IncidentAreaResponse(
-                    message.incidentId,
-                    message.title,
-                    message.longitude,
-                    message.latitude,
-                    message.timestamp.toString()
+                    id = message.incidentId,
+                    title = message.title,
+                    categoryCode = message.categoryCode,
+                    categoryName = message.categoryName,
+                    dangerLevel = message.dangerLevel,
+                    longitude = message.longitude,
+                    latitude = message.latitude,
+                    createdAt = message.timestamp.toString()
                 )
                 Log.i("Incident from notification",incident.toString())
                 addIncidentOnMap(incident)

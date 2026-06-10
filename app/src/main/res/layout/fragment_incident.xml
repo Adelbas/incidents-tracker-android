@@ -43,6 +43,23 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:gravity="center_horizontal"
+                    android:paddingBottom="4dp"/>
+
+            <TextView
+                    android:id="@+id/incidentCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="8dp"/>
+
+            <TextView
+                    android:id="@+id/incidentDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:gravity="start"
                     android:paddingBottom="8dp"/>
 
             <ImageView

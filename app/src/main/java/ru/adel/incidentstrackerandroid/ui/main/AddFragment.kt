@@ -49,6 +49,7 @@ class AddFragment : Fragment() {
 
         val submitButton = view.findViewById<Button>(R.id.submitBtn)
         val titleText = view.findViewById<EditText>(R.id.titleText)
+        val descriptionText = view.findViewById<EditText>(R.id.descriptionText)
         val btnSelectImage = view.findViewById<Button>(R.id.selectImageButton)
         val selectedImageView = view.findViewById<ImageView>(R.id.selectedImageView)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
@@ -71,6 +72,7 @@ class AddFragment : Fragment() {
         submitButton.setOnClickListener {
             hideKeyboard(requireActivity(), requireView())
             val title = titleText.text.toString()
+            val description = descriptionText.text.toString().trim().ifEmpty { null }
             val latitude = arguments?.getDouble("latitude")
             val longitude = arguments?.getDouble("longitude")
 
@@ -79,6 +81,7 @@ class AddFragment : Fragment() {
                 mainViewModel.createIncident(
                     IncidentPostRequest(
                         title,
+                        description,
                         longitude,
                         latitude,
                         image!!
@@ -106,6 +109,7 @@ class AddFragment : Fragment() {
                     foreground.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
                     titleText.text.clear()
+                    descriptionText.text.clear()
                     Toast.makeText(requireContext(), "Происшествие успешно создано", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_add_to_MainFragment)
                 }

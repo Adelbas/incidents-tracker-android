@@ -3,6 +3,7 @@ package ru.adel.incidentstrackerandroid.ui.main
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -35,6 +36,8 @@ class IncidentFragment : Fragment() {
     private val mainViewModel : MainViewModel by viewModels()
 
     private lateinit var incidentTitleTv: TextView
+    private lateinit var incidentCategoryTv: TextView
+    private lateinit var incidentDescriptionTv: TextView
     private lateinit var createdByTv: TextView
     private lateinit var incidentDateTv: TextView
     private lateinit var viewsCountTv: TextView
@@ -61,6 +64,8 @@ class IncidentFragment : Fragment() {
         val backButton = view.findViewById<ImageButton>(R.id.backButton)
 
         incidentTitleTv = view.findViewById(R.id.incidentTitle)
+        incidentCategoryTv = view.findViewById(R.id.incidentCategory)
+        incidentDescriptionTv = view.findViewById(R.id.incidentDescription)
         createdByTv = view.findViewById(R.id.incidentCreatedBy)
         incidentDateTv = view.findViewById(R.id.incidentDate)
         viewsCountTv = view.findViewById(R.id.viewsCount)
@@ -110,6 +115,26 @@ class IncidentFragment : Fragment() {
         val imageBitmap = base64ToBitmap(response.image)
 
         incidentTitleTv.text = response.title
+
+        val categoryName = response.categoryName
+        val dangerLabel = dangerLabel(response.dangerLevel)
+        if (categoryName != null || dangerLabel != null) {
+            val parts = listOfNotNull(categoryName, dangerLabel?.let { "Опасность: $it" })
+            incidentCategoryTv.text = parts.joinToString(" • ")
+            incidentCategoryTv.setTextColor(dangerColor(response.dangerLevel))
+            incidentCategoryTv.visibility = View.VISIBLE
+        } else {
+            incidentCategoryTv.visibility = View.GONE
+        }
+
+        val description = response.description
+        if (!description.isNullOrBlank()) {
+            incidentDescriptionTv.text = description
+            incidentDescriptionTv.visibility = View.VISIBLE
+        } else {
+            incidentDescriptionTv.visibility = View.GONE
+        }
+
         createdByTv.text = "Опубликовал: ${response.postedUserLastName} ${response.postedUserFirstName}"
         incidentDateTv.text = "Дата: ${dateTime}"
         viewsCountTv.text = response.views.toString()
@@ -118,6 +143,22 @@ class IncidentFragment : Fragment() {
         val latitude = response.latitude
         val longitude = response.longitude
         val searchSession = searchManager.submit(Point(latitude, longitude), 16, searchOptions, searchSessionListener)
+    }
+
+    private fun dangerLabel(dangerLevel: String?): String? = when (dangerLevel) {
+        "LOW" -> "низкая"
+        "MEDIUM" -> "средняя"
+        "HIGH" -> "высокая"
+        "CRITICAL" -> "критическая"
+        else -> null
+    }
+
+    private fun dangerColor(dangerLevel: String?): Int = when (dangerLevel) {
+        "LOW" -> Color.parseColor("#2E7D32")
+        "MEDIUM" -> Color.parseColor("#F9A825")
+        "HIGH" -> Color.parseColor("#EF6C00")
+        "CRITICAL" -> Color.parseColor("#C62828")
+        else -> Color.DKGRAY
     }
 
     private fun base64ToBitmap(base64String: String): Bitmap? {
